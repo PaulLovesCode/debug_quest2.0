@@ -56,6 +56,7 @@ const handleFilterChange = (newRange) => {
     dateRange,
     handleNextPage,
     handlePrevPage,
-    handleFilterChange
+    handleFilterChange,
+    totalPages: Math.ceil(initialData.length / 3) || 1
   };
 }

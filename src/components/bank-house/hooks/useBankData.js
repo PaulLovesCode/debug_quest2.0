@@ -59,6 +59,22 @@ export function useBankData() {
       etaMs: Date.now() + 1700,
     });
 
+    const pendingTxId = `#TRX-P-${Date.now()}`;
+    const beneficiaryName = mockBeneficiaries.find(b => b.id === beneficiary)?.name || beneficiary;
+
+    // Add optimistic pending transaction
+    setTransactions(prev => {
+      const updated = [{
+        id: pendingTxId,
+        date: new Date().toISOString(),
+        recipient: beneficiaryName,
+        status: 'Pending',
+        amount: -transferAmount
+      }, ...prev];
+      writeCachedTransactions(updated);
+      return updated;
+    });
+
     const result = await executeTransferRequest({
       amount: transferAmount,
       beneficiary,
@@ -67,28 +83,31 @@ export function useBankData() {
     });
 
     if (!result.ok) {
+      // Revert balance and update transaction status to Failed
+      setBalance(balanceRef.current = openingBalance);
+      setTransactions(prev => {
+        const updated = prev.map(tx => tx.id === pendingTxId ? { ...tx, status: 'Failed' } : tx);
+        writeCachedTransactions(updated);
+        return updated;
+      });
       return { success: false, silent: result.silent };
     }
 
     pushServerBalanceHint(result.settledBalance, result.ledgerVersion);
 
-    window.setTimeout(() => {
-      writeCachedBalance(result.settledBalance, result.ledgerVersion);
-    }, 2400);
+    // Immediate cache update (removed 2.4s delay for consistency)
+    writeCachedBalance(result.settledBalance, result.ledgerVersion);
 
     setBalance(balanceRef.current = result.settledBalance);
-
     publishBalanceBroadcast(result.settledBalance, result.ledgerVersion);
 
-    const beneficiaryName = mockBeneficiaries.find(b => b.id === beneficiary)?.name || beneficiary;
+    // Finalize transaction status
     setTransactions(prev => {
-      const updated = [{
-        id: `#TRX-${Math.floor(Math.random() * 900 + 100)}`,
-        date: new Date().toISOString(),
-        recipient: beneficiaryName,
-        status: 'Completed',
-        amount: -transferAmount
-      }, ...prev];
+      const updated = prev.map(tx => tx.id === pendingTxId ? { 
+        ...tx, 
+        status: 'Completed', 
+        id: `#TRX-${Math.floor(Math.random() * 900 + 100)}` 
+      } : tx);
       writeCachedTransactions(updated);
       return updated;
     });
@@ -117,6 +136,8 @@ export function useBankData() {
 
         balanceRef.current = incomingBalance;
         setBalance(incomingBalance);
+        // Sync transactions across tabs
+        setTransactions(hydrateCachedTransactions(mockTransactions));
       } catch {
         // no-op
       }
