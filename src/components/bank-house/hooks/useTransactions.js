@@ -18,7 +18,7 @@ export function useTransactions(initialData) {
       
       const filtered = initialData.filter(tx => {
         const matchesDate = true; 
-        const searchLower = currentSearch.toLowerCase();
+        const searchLower = (currentSearch || '').toLowerCase();
         const matchesSearch = !currentSearch || 
           tx.id.toLowerCase().includes(searchLower) || 
           tx.recipient.toLowerCase().includes(searchLower);
@@ -62,7 +62,7 @@ export function useTransactions(initialData) {
   };
 
   useEffect(() => {
-    fetchTransactions(page, dateRange);
+    fetchTransactions(page, dateRange, searchTerm);
   }, [initialData]);
 
   return {
@@ -74,6 +74,7 @@ export function useTransactions(initialData) {
     handleNextPage,
     handlePrevPage,
     handleFilterChange,
+    handleSearchChange,
     totalPages: Math.ceil(initialData.length / 3) || 1
   };
 }

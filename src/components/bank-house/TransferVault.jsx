@@ -79,6 +79,7 @@ export default function TransferVault({ balance, beneficiaries, onTransfer, sele
               placeholder="0.00" 
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              onWheel={(e) => e.target.blur()}
             />
            <button
   className="max-btn"

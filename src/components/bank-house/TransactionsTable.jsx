@@ -20,6 +20,7 @@ export default function TransactionsTable({ allTransactions }) {
     handleNextPage,
     handlePrevPage,
     handleFilterChange,
+    handleSearchChange,
     totalPages
   } = useTransactions(allTransactions);
 

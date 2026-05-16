@@ -14,13 +14,13 @@ import {
 import { bootstrapTransferAuth, executeTransferRequest } from '../services/transferService';
 
 const mockTransactions = [
-  { id: '#TRX-892', date: '2026-10-20T14:32:00Z', recipient: 'NeoCorp Logistics', status: 'Completed', amount: -1450.00 },
-  { id: '#TRX-891', date: '2026-10-20T09:15:00Z', recipient: 'SYS_UNKNOWN', status: 'Pending', amount: -89000.00 },
-  { id: '#TRX-890', date: '2026-10-19T11:00:00Z', recipient: 'Salary Deposit', status: 'Completed', amount: 12000.00 },
-  { id: '#TRX-889', date: '2026-10-19T10:20:00Z', recipient: 'Glitch City Power', status: 'Failed', amount: -320.50 },
-  { id: '#TRX-888', date: '2026-10-12T08:00:00Z', recipient: 'Cyberware Upgrades', status: 'Completed', amount: -4200.00 },
-  { id: '#TRX-887', date: '2026-10-10T14:00:00Z', recipient: 'AeroDyne Systems', status: 'Completed', amount: -150.00 },
-  { id: '#TRX-886', date: '2026-10-09T09:00:00Z', recipient: 'Mercenary Guild', status: 'Completed', amount: -8500.00 },
+  { id: '#TRX-892', date: '2026-05-15T14:32:00Z', recipient: 'NeoCorp Logistics', status: 'Completed', amount: -1450.00 },
+  { id: '#TRX-891', date: '2026-05-14T09:15:00Z', recipient: 'SYS_UNKNOWN', status: 'Pending', amount: -89000.00 },
+  { id: '#TRX-890', date: '2026-05-14T11:00:00Z', recipient: 'Salary Deposit', status: 'Completed', amount: 12000.00 },
+  { id: '#TRX-889', date: '2026-05-13T10:20:00Z', recipient: 'Glitch City Power', status: 'Failed', amount: -320.50 },
+  { id: '#TRX-888', date: '2026-05-12T08:00:00Z', recipient: 'Cyberware Upgrades', status: 'Completed', amount: -4200.00 },
+  { id: '#TRX-887', date: '2026-05-11T14:00:00Z', recipient: 'AeroDyne Systems', status: 'Completed', amount: -150.00 },
+  { id: '#TRX-886', date: '2026-05-10T09:00:00Z', recipient: 'Mercenary Guild', status: 'Completed', amount: -8500.00 },
 ];
 
 const mockBeneficiaries = [
