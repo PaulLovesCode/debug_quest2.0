@@ -191,18 +191,23 @@ export default function ArcadeHouse({ onBack }) {
 
   const jumpOffset = isJumping ? Math.max(0, Math.sin((jumpTick / 6) * Math.PI) * 56) : 0
 
-  const playCard = (reward) => {
-    setIsJumping(false);
-  setJumpTick(0);
-    setCoins((prev) => prev + reward)
-    setScore((prev) => prev + reward)
-    setXp((prev) => clamp(prev + 4, 0, 100))
-    if (Math.random() > 0.7) {
-      setStreak((prev) => prev + 1)
-    }
+  const isLaunching = useRef(false)
+
+  const playCard = () => {
+    if (isLaunching.current) return
+    isLaunching.current = true
+    
+    setIsJumping(false)
+    setJumpTick(0)
+    setGameStarted(true)
+    
+    setTimeout(() => {
+      isLaunching.current = false
+    }, 1000)
   }
 
   const onStartGame = () => {
+    if (gameStarted) return
     setGameStarted(true)
     setScore((prev) => prev + 40)
   }
@@ -338,7 +343,7 @@ export default function ArcadeHouse({ onBack }) {
                       key={card.id}
                       type="button"
                       className="arcade-machine"
-                      onClick={() => playCard(card.reward)}
+                      onClick={() => playCard()}
                     >
                       <div className="machine-marquee">{card.title}</div>
                       <div className={`machine-screen ${index % 3 === 0 ? 'glitch-flicker-soft' : ''}`}>
@@ -357,7 +362,7 @@ export default function ArcadeHouse({ onBack }) {
                           className="arcade-play-btn"
                           onClick={(event) => {
                             event.stopPropagation()
-                            playCard(card.reward)
+                            playCard()
                           }}
                         >
                           Play
